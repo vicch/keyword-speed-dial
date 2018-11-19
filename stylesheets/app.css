@@ -1,0 +1,35 @@
+/*general*/
+.c-p {
+  cursor: pointer;
+  
+}
+
+/*Text*/
+.text-muted {
+  color: #999;
+}
+
+/*width*/
+.fw {
+  width: 100%;
+}
+/*margins & paddings*/
+.mt-1 {
+  margin-top: 5px;
+}
+
+.mt-2 {
+  margin-top: 10px;
+}
+
+.mt-3 {
+  margin-top: 20px;
+}
+
+.mt-4 {
+  margin-top: 30px;
+}
+
+.mt-5 {
+  margin-top: 50px;
+}

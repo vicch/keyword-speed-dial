@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add Shortcuts</title>
+    <link rel="stylesheet" href="../../stylesheets/bulma.css">
+    <link rel="stylesheet" href="../../stylesheets/override.css">
+    <link rel="stylesheet" href="../../stylesheets/app.css">
+    <script type="text/javascript" src="../constant.js"></script>
+    <script type="module" src="./options.js"></script>
+  </head>
+  <body>
+    <section class="section">
+      <div class="container">
+        <div class="columns">
+          <div class="column">
+            <button class="button is-primary is-pulled-right modal-button" data-target="modal-create-group">Create Group</button>
+          </div>
+        </div>
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">
+              Add Shortcuts
+            </p>
+          </header>
+          <div class="card-content">
+            <div class="add-new-keyword">
+              <form class="field is-horizontal" id="createShortcutForm">
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <div class="select fw">
+                        <select id="groupList" class="fw">
+                          <option value="default">Default</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <p class="control">
+                      <input class="input" type="text" placeholder="Shortcut (e.g. 'yt')" id="keyword">
+                    </p>
+                  </div>
+                  <div class="field is-grouped">
+                    <p class="control is-expanded">
+                      <input class="input" type="text" placeholder="URL (e.g. 'youtube.com')" id="url">
+                    </p>
+                    <p class="control">
+                      <button class="button is-primary" id="addShortcut" type="submit">
+                        Add
+                      </button>
+                    </p>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="card mt-5">
+          <header class="card-header">
+            <p class="card-header-title">
+              Existing Shortcuts
+            </p>
+          </header>
+          <div class="card-content">
+            <table class="table is-striped is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Group</th>
+                  <th>keyword</th>
+                  <th>URL</th>                
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="keywords-info">
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="columns">
+          <div class="column mt-3 has-text-centered">
+            <strong>Developed by <a target="_blank" href="https://sasi.io/">Sasikanth Dronavalli</a>. Code is opensourced on <a target="_blank" href="https://github.com/sasikanth513">Github</a>. Buy me <a href="https://www.paypal.me/KDronavalli/5usd" target="_blank">Coffee.</a></strong>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+
+  <div class="modal" id="modal-create-group">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Add Group</p>
+        <!-- <button class="delete" aria-label="close"></button> -->
+      </header>
+      <section class="modal-card-body">
+        <form class="field is-horizontal" id="createGroupForm">
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <input class="input" type="text" placeholder="Prefix (optional)" id="prefix">
+              </p>
+            </div>
+            <div class="field">
+              <p class="control">
+                <input class="input" type="text" placeholder="Name (required)" id="groupName">
+              </p>
+            </div>
+          </div>
+        </form>
+        <div class="field-body">
+          <small class="text-muted">
+            <strong>Prefix:</strong> A prefix for all shortcuts in this group. For e.g., if you have lots of youtube playlists you want to create shortcuts for, instead of adding shortcuts like 'yp1', 'yp2', 'yp3', etc. You can add prefix to this group as 'yp' and you can create shortcuts with keywords '1', '2', '3', etc. which is same as adding 'yp1', 'yp2', 'yp3', etc.
+          </small>
+        </div><br>
+        <div class="field-body">
+          <small class="text-muted">
+            <strong>Name:</strong> Name of the group.
+          </small>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-success" id="submitCreateGroupForm">Create</button>
+        <button class="button modal-hide" data-target="modal-create-group">Cancel</button>
+      </footer>
+    </div>
+  </div>
+</html>

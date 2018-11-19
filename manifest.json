@@ -1,0 +1,28 @@
+{
+  "name": "Keyword Redirect",
+  "description": "Type 'go' and a keyword into the address bar to open url.",
+  "version": "0.2",
+  "options_page": "src/options/options.html",
+  "background": {
+    "scripts": ["src/background/background.js"],
+    "persistent": false
+  },
+  "permissions": [
+    "storage",
+    "tabs"
+  ],
+  "omnibox": { "keyword" : "go" },
+  "manifest_version": 2,
+  "browser_action": {
+    "default_icon": {
+      "16": "assets/extension-icons/icon16.png",
+      "32": "assets/extension-icons/icon32.png"
+    }
+  },
+  "icons": {
+    "16": "assets/extension-icons/icon16.png",
+    "32": "assets/extension-icons/icon32.png",
+    "48": "assets/extension-icons/icon48.png",
+    "128": "assets/extension-icons/icon.png"
+  }
+}

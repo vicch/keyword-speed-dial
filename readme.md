@@ -1,11 +1,20 @@
-# Where/How can I use it?
-- Redirect to favourite youtube playlist/channel you listen to daily
-- Redirect to your favourite author page from blogs/news sites
-- Redirect to that subreddit/facebook group/twitter profile you visit ofen
-- Redirect to that one of many slack groups you are part of
-- Redirect to that github project you are working right now
--
+## Keyword Redirect Chrome Extension
 
-https://developer.chrome.com/extensions/options
-https://github.com/jgthms/bulma
-https://datatables.net/
+**Chrome extension [link ](https://chrome.google.com/webstore/detail/keyword-redirect/okmndadncjgigahlgcbgenaoecagebhh)**
+
+### What are the use cases?
+
+- Add shortcut to favourite youtube playlists/channels you listen to daily
+- Add shortcuts to your favourite author page from blogs/news sites
+- Add shortcuts to that subreddit/facebook group/twitter profile you visit often
+- Add shortcuts to all the slack groups you are part of
+- Add shortcut to project documentation you're working on
+
+ ...etc
+
+### Source code
+
+Developed using basic html, css and js. Should be very easy to understand.
+
+
+**Any feedback / contributions are welcome**

@@ -5,11 +5,12 @@ const getGroupName = (groups, groupId) => {
 
 export const renderUI = () => {
   chrome.storage.local.get(['shortcuts', 'groups'], function(result) {
-    // console.log(result);
+
     const shortcuts = result.shortcuts || [];
     const groups = result.groups || [];
+
     // create group form
-    const groupEl = document.getElementById('groupList');
+    const groupEl = document.getElementById('group-list');
     let groupStr = groups.map((group) =>
         `
         <option value=${group.id}>
@@ -19,21 +20,32 @@ export const renderUI = () => {
     const groupHTML = groupStr.join(' ');
     groupEl.innerHTML = groupHTML;
 
-    // table
-    const el = document.getElementById('keywords-info');
-    let strs = shortcuts.map((shortcut) =>
-        `
-        <tr>
-          <td>${getGroupName(groups, shortcut.group)}</td>
-          <td>${shortcut.keyword}</td>
-          <td>${shortcut.url}</td>
-          <td>
-            <img src="../../assets/icons/trash-alt-regular.svg" width="15" class="c-p" id="deleteShortcut" data-keyword="${shortcut.keyword}">
-          </td>
-        </tr>
-      `);
-    const html = strs.join(' ');
-    el.innerHTML = html;
+    // groups table
+    const groupsInfo = document.getElementById('groups-info');
+    let groupsItems = groups.map((group) =>
+      `
+      <tr>
+        <td>${group.name}</td>
+        <td>${group.prefix}</td>
+        <td></td>
+      </tr>
+    `);
+    groupsInfo.innerHTML = groupsItems.join(' ');
+
+    // shortcuts table
+    const shortcutsInfo = document.getElementById('shortcuts-info');
+    let shortcutsItems = shortcuts.map((shortcut) =>
+      `
+      <tr>
+        <td>${getGroupName(groups, shortcut.group)}</td>
+        <td>${shortcut.keyword}</td>
+        <td>${shortcut.url}</td>
+        <td>
+          <img src="../../assets/icons/trash-alt-regular.svg" width="15" class="c-p" id="deleteShortcut" data-keyword="${shortcut.keyword}">
+        </td>
+      </tr>
+    `);
+    shortcutsInfo.innerHTML = shortcutsItems.join(' ');
   });
 }
 

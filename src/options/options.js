@@ -17,7 +17,7 @@ const deleteShortcutWithKeyword = (keyword) => {
 const appendPrefixToKeyword = (groups, groupId, keyword) => {
   const group = groups.find(obj => obj.id === groupId);
   if (group && group.prefix) {
-    return `${group.prefix}${keyword}`;
+    return `${group.prefix} ${keyword}`;
   }
   return keyword;
 };
@@ -26,7 +26,7 @@ const initCreateShortcutForm = () => {
   const el = document.getElementById('createShortcutForm');
   el.addEventListener("submit", function(e) {
     e.preventDefault();
-    const group = document.getElementById('groupList').value;
+    const group = document.getElementById('group-list').value;
     let keyword = document.getElementById('keyword').value;
     const url = document.getElementById('url').value;
 
@@ -39,7 +39,6 @@ const initCreateShortcutForm = () => {
       alert("Please enter complete URL including http");
       return; 
     }
-
 
     chrome.storage.local.get(['shortcuts', 'groups'], function(result) {
       const shortcuts = result.shortcuts || [];
@@ -57,6 +56,13 @@ const initCreateShortcutForm = () => {
         url,
         group,
       });
+      shortcuts.sort((a, b) => {
+        if (a.group == b.group) {
+          return (a.keyword > b.keyword) ? 1 : -1;
+        } else {
+          return (a.group > b.group) ? 1 : -1;
+        }
+      });
       chrome.storage.local.set({shortcuts: shortcuts}, function() {
         document.getElementById('keyword').value = '';
         document.getElementById('url').value = '';
@@ -67,10 +73,9 @@ const initCreateShortcutForm = () => {
   }, false);
 }
 
-const closeCreateGroupModal = () => {
+const resetCreateGroupForm = () => {
   document.getElementById('prefix').value = '';
   document.getElementById('groupName').value = '';
-  document.getElementById('modal-create-group').classList.remove('is-active');
 }
 
 const handleCreateGroupSubmit = () => {
@@ -94,8 +99,11 @@ const handleCreateGroupSubmit = () => {
       name: groupName,
       id: guid(),
     });
+    groups.sort((a, b) => {
+      return (a.groupName > b.groupName) ? 1 : -1;
+    });
     chrome.storage.local.set({groups: groups}, function() {
-      closeCreateGroupModal();
+      resetCreateGroupForm();
       renderUI();
     });
   });
@@ -124,7 +132,7 @@ const initDeleteShortcutEvent = () => {
 
     if (classes.contains('modal-hide')) {
       const target = e.target.getAttribute('data-target');
-      closeCreateGroupModal();
+      resetCreateGroupForm();
     }
 
     if (e.target.id === 'submitCreateGroupForm') {

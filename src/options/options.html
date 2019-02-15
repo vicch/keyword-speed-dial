@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Add Shortcuts</title>
+    <title>Keyword Speed Dial Options</title>
     <link rel="stylesheet" href="../../stylesheets/bulma.css">
     <link rel="stylesheet" href="../../stylesheets/override.css">
     <link rel="stylesheet" href="../../stylesheets/app.css">
@@ -13,19 +13,26 @@
   <body>
     <section class="section">
       <div class="container">
+        <div class="columns">
+          <div class="column">
+            <div class="buttons is-pulled-right">
+              <button class="button is-primary modal-button" data-target="modal-import-data">Import</button>
+              <button class="button is-primary modal-button" data-target="modal-export-data" id="export-data-load">Export</button>
+            </div>
+          </div>
+        </div>
+
         <div class="card">
           <header class="card-header">
-            <p class="card-header-title">
-              Groups
-            </p>
+            <p class="card-header-title">Speed Dial Groups</p>
           </header>
           <div class="card-content">
             <div class="add-new-group">
-              <form class="field is-horizontal" id="createGroupForm">
+              <form class="field is-horizontal" id="create-group-form">
                 <div class="field-body">
                   <div class="field">
                     <p class="control">
-                      <input class="input" type="text" placeholder="Name (required)" id="groupName">
+                      <input class="input" type="text" placeholder="Name" id="group-name">
                     </p>
                   </div>
                   <div class="field is-grouped">
@@ -33,7 +40,7 @@
                       <input class="input" type="text" placeholder="Prefix (optional)" id="prefix">
                     </p>
                     <p class="control">
-                      <button class="button is-primary" id="submitCreateGroupForm">Add</button>
+                      <button class="button is-primary" id="create-group-form-submit">Add</button>
                     </p>
                   </div>
                 </div>
@@ -44,8 +51,7 @@
               <thead>
                 <tr>
                   <th width="15%">Group</th>
-                  <th width="75%">Prefix</th>
-                  <th width="10%">Actions</th>
+                  <th width="85%">Prefix</th>
                 </tr>
               </thead>
               <tbody id="groups-info">
@@ -56,13 +62,11 @@
 
         <div class="card mt-4">
           <header class="card-header">
-            <p class="card-header-title">
-              Shortcuts
-            </p>
+            <p class="card-header-title">Speed Dials</p>
           </header>
           <div class="card-content">
             <div class="add-new-keyword">
-              <form class="field is-horizontal" id="createShortcutForm">
+              <form class="field is-horizontal" id="create-shortcut-form">
                 <div class="field-body">
                   <div class="field">
                     <div class="control">
@@ -75,15 +79,15 @@
                   </div>
                   <div class="field">
                     <p class="control">
-                      <input class="input" type="text" placeholder="Shortcut (e.g. 'yt')" id="keyword">
+                      <input class="input" type="text" placeholder="Keyword" id="keyword">
                     </p>
                   </div>
                   <div class="field is-grouped">
                     <p class="control is-expanded">
-                      <input class="input" type="text" placeholder="URL (e.g. 'youtube.com')" id="url">
+                      <input class="input" type="text" placeholder="URL" id="url">
                     </p>
                     <p class="control">
-                      <button class="button is-primary" id="addShortcut" type="submit">Add</button>
+                      <button class="button is-primary" id="create-shortcut-submit" type="submit">Add</button>
                     </p>
                   </div>
                 </div>
@@ -106,11 +110,62 @@
         </div>
 
         <div class="columns">
-          <div class="column mt-3 has-text-centered">
-            <strong>Developed by <a target="_blank" href="https://sasi.io/">Sasikanth Dronavalli</a>. Code is opensourced on <a target="_blank" href="https://github.com/sasikanth513">Github</a>. Buy me <a href="https://www.paypal.me/KDronavalli/5usd" target="_blank">Coffee.</a></strong>
+          <div class="column mt-4 has-text-centered">
+            <strong>Developed by <a target="_blank" href="https://sasi.io/">Sasikanth Dronavalli</a>. Forked by <a target="_blank" href="https://github.com/vicch">Victor Chen</a></strong>
           </div>
         </div>
       </div>
     </section>
   </body>
+
+  <div class="modal" id="modal-import-data">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Import Data</p>
+      </header>
+      <section class="modal-card-body">
+        <form class="field is-horizontal" id="import-data-form">
+          <div class="field-body">
+            <div class="field">
+              <label class="label">Import data in JSON format</label>
+              <p class="control">
+                <textarea class="textarea" id="import-data-json"></textarea>
+              </p>
+              <p class="help">Groups with same names and speed dials with same keywords will be ignored.</p>
+            </div>
+          </div>
+        </form>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-primary modal-hide" data-target="modal-import-data" id="import-data-submit">Import</button>
+        <button class="button modal-hide" data-target="modal-import-data">Cancel</button>
+      </footer>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-export-data">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Export Data</p>
+      </header>
+      <section class="modal-card-body">
+        <form class="field is-horizontal" id="export-data-form">
+          <div class="field-body">
+            <div class="field">
+              <label class="label">Export data in JSON format</label>
+              <p class="control">
+                <pre id="export-data-json"></pre>
+              </p>
+            </div>
+          </div>
+        </form>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-primary modal-hide" data-target="modal-export-data" id="export-data-copy">Copy</button>
+        <button class="button modal-hide" data-target="modal-export-data">Done</button>
+      </footer>
+    </div>
+  </div>
 </html>

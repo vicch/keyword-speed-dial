@@ -1,5 +1,5 @@
 {
-  "name": "Keyword Redirect",
+  "name": "Keyword Speed Dial",
   "description": "Type 'go' and a keyword into the address bar to open url.",
   "version": "0.2",
   "options_page": "src/options/options.html",

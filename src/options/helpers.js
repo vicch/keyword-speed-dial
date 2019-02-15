@@ -14,7 +14,7 @@ export const renderUI = () => {
     let groupStr = groups.map((group) =>
         `
         <option value=${group.id}>
-          ${group.name} ${group.prefix ? `(${group.prefix})` : ''}
+          ${group.name}
         </option>
       `);
     const groupHTML = groupStr.join(' ');
@@ -27,7 +27,6 @@ export const renderUI = () => {
       <tr>
         <td>${group.name}</td>
         <td>${group.prefix}</td>
-        <td></td>
       </tr>
     `);
     groupsInfo.innerHTML = groupsItems.join(' ');
@@ -41,7 +40,7 @@ export const renderUI = () => {
         <td>${shortcut.keyword}</td>
         <td>${shortcut.url}</td>
         <td>
-          <img src="../../assets/icons/trash-alt-regular.svg" width="15" class="c-p" id="deleteShortcut" data-keyword="${shortcut.keyword}">
+          <img src="../../assets/icons/trash-alt-regular.svg" width="15" class="c-p" id="shortcut-delete" data-keyword="${shortcut.keyword}">
         </td>
       </tr>
     `);
@@ -72,7 +71,7 @@ export const guid = () => {
       .toString(16)
       .substring(1);
   }
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+  return s4() + s4();
 }
 
 export const isValidURL = (string) => {

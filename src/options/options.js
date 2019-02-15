@@ -1,5 +1,100 @@
 import { setDefaultValues, renderUI, guid, isValidURL } from './helpers.js';
 
+const initCreateGroupForm = () => {
+  const el = document.getElementById('create-group-form');
+  el.addEventListener('submit', function(e) {
+    e.preventDefault();
+    handleCreateGroupSubmit();
+  }, false);
+}
+
+const resetCreateGroupForm = () => {
+  document.getElementById('prefix').value = '';
+  document.getElementById('group-name').value = '';
+}
+
+const handleCreateGroupSubmit = () => {
+  const prefix = document.getElementById('prefix').value || false;
+  const groupName = document.getElementById('group-name').value;
+
+  if (!groupName || !groupName.trim()) {
+    alert('Please enter group name');
+    return;
+  }
+
+  chrome.storage.local.get(['groups'], function(result) {
+    const groups = result.groups || [];
+
+    const exists = groups.find(obj => obj.name === groupName.trim());
+    if (exists) {
+      alert('Group name already exists');
+      return;
+    }
+
+    groups.push({
+      id: guid(),
+      prefix: prefix,
+      name: groupName
+    });
+    groups.sort((a, b) => {
+      return (a.groupName > b.groupName) ? 1 : -1;
+    });
+    chrome.storage.local.set({groups: groups}, function() {
+      resetCreateGroupForm();
+      renderUI();
+    });
+  });
+}
+
+const initCreateShortcutForm = () => {
+  const el = document.getElementById('create-shortcut-form');
+  el.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const group = document.getElementById('group-list').value;
+    let keyword = document.getElementById('keyword').value;
+    const url = document.getElementById('url').value;
+
+    if (!keyword || !url) {
+      alert('Please enter valid details');
+      return;
+    }
+
+    if (!isValidURL(url)) {
+      alert('Please enter complete URL including http');
+      return; 
+    }
+
+    chrome.storage.local.get(['shortcuts', 'groups'], function(result) {
+      const shortcuts = result.shortcuts || [];
+      const groups = result.groups || [];
+
+      if (group !== 'default') {
+        keyword = appendPrefixToKeyword(groups, group, keyword);
+      }
+
+      const exists = shortcuts.find(obj => obj.keyword === keyword.trim());
+      if (exists) {
+        alert('Keyword already exists');
+        return;
+      }
+
+      shortcuts.push({ group, keyword, url });
+      shortcuts.sort((a, b) => {
+        if (a.group == b.group) {
+          return (a.keyword > b.keyword) ? 1 : -1;
+        } else {
+          return (a.group > b.group) ? 1 : -1;
+        }
+      });
+      chrome.storage.local.set({shortcuts: shortcuts}, function() {
+        document.getElementById('keyword').value = '';
+        document.getElementById('url').value = '';
+        renderUI();
+      });
+    });
+
+  }, false);
+}
 
 const deleteShortcutWithKeyword = (keyword) => {
   chrome.storage.local.get(['shortcuts'], function(result) {
@@ -22,40 +117,50 @@ const appendPrefixToKeyword = (groups, groupId, keyword) => {
   return keyword;
 };
 
-const initCreateShortcutForm = () => {
-  const el = document.getElementById('createShortcutForm');
-  el.addEventListener("submit", function(e) {
-    e.preventDefault();
-    const group = document.getElementById('group-list').value;
-    let keyword = document.getElementById('keyword').value;
-    const url = document.getElementById('url').value;
+const handleImportDataSubmit = () => {
+  const json = document.getElementById('import-data-json').value;
+  try {
+    const importData = JSON.parse(json);
 
-    if (!keyword || !url) {
-      alert("Please enter valid details");
-      return;
-    }
+    const importGroups = importData.groups || [];
+    const importShortcuts = importData.shortcuts || [];
 
-    if (!isValidURL(url)) {
-      alert("Please enter complete URL including http");
-      return; 
-    }
-
-    chrome.storage.local.get(['shortcuts', 'groups'], function(result) {
-      const shortcuts = result.shortcuts || [];
+    chrome.storage.local.get(['groups', 'shortcuts'], function(result) {
       const groups = result.groups || [];
-      if (group !== 'default') {
-        keyword = appendPrefixToKeyword(groups, group, keyword);
-      }
-      const exists = shortcuts.find(obj => obj.keyword === keyword.trim());
-      if (exists) {
-        alert("shortcut already exists");
-        return;
-      }
-      shortcuts.push({
-        keyword,
-        url,
-        group,
+      const shortcuts = result.shortcuts || [];
+
+      importGroups.forEach(({ id, name, prefix }) => {
+        if (!id || !name) {
+          return;
+        }
+
+        // Ignore import group if ID already exists
+        const exists = groups.find((group) => group.id === id);
+        if (exists) {
+          return;
+        }
+
+        groups.push({ id, name, prefix });
       });
+
+      groups.sort((a, b) => {
+        return (a.groupName > b.groupName) ? 1 : -1;
+      });
+
+      importShortcuts.forEach(({ group, keyword, url }) => {
+        if (!group || !keyword || !url) {
+          return;
+        }
+
+        // Ignore import shortcut if keyword already exists
+        const exists = shortcuts.find((shortcut) => shortcut.keyword === keyword);
+        if (exists) {
+          return;
+        }
+
+        shortcuts.push({ group, keyword, url });
+      });
+
       shortcuts.sort((a, b) => {
         if (a.group == b.group) {
           return (a.keyword > b.keyword) ? 1 : -1;
@@ -63,80 +168,65 @@ const initCreateShortcutForm = () => {
           return (a.group > b.group) ? 1 : -1;
         }
       });
-      chrome.storage.local.set({shortcuts: shortcuts}, function() {
-        document.getElementById('keyword').value = '';
-        document.getElementById('url').value = '';
+
+      chrome.storage.local.set({groups: groups, shortcuts: shortcuts}, function() {
         renderUI();
       });
     });
-
-  }, false);
-}
-
-const resetCreateGroupForm = () => {
-  document.getElementById('prefix').value = '';
-  document.getElementById('groupName').value = '';
-}
-
-const handleCreateGroupSubmit = () => {
-  const prefix = document.getElementById('prefix').value || false;
-  const groupName = document.getElementById('groupName').value;
-
-  if (!groupName || !groupName.trim()) {
-    alert("Please enter group name");
+  } catch (e) {
+    alert('Invalid JSON');
     return;
   }
+}
 
-  chrome.storage.local.get(['groups'], function(result) {
-    const groups = result.groups || [];
-    const exists = groups.find(obj => obj.name === groupName.trim());
-    if (exists) {
-      alert("Group name already exists");
-      return;
-    }
-    groups.push({
-      prefix,
-      name: groupName,
-      id: guid(),
-    });
-    groups.sort((a, b) => {
-      return (a.groupName > b.groupName) ? 1 : -1;
-    });
-    chrome.storage.local.set({groups: groups}, function() {
-      resetCreateGroupForm();
-      renderUI();
-    });
+const handleExportDataLoad = () => {
+  const el = document.getElementById('export-data-json');
+  chrome.storage.local.get(['groups', 'shortcuts'], (result) => {
+    el.innerHTML = JSON.stringify(result, undefined, 2);
   });
 }
 
-const initCreateGroupForm = () => {
-  const el = document.getElementById('createGroupForm');
-  el.addEventListener("submit", function(e) {
-    e.preventDefault();
-    handleCreateGroupSubmit();
-  }, false);
+const handleExportDataCopy = () => {
+  const el = document.getElementById('export-data-json');
+  const json = el.textContent;
+
+  const tmpEl = document.createElement('textarea');
+  tmpEl.value = json;
+  document.body.appendChild(tmpEl);
+  tmpEl.select();
+  document.execCommand('copy');
+  document.body.removeChild(tmpEl);
 }
 
-const initDeleteShortcutEvent = () => {
+const initClickHandlers = () => {
   document.addEventListener('click', function(e){
-    if(e.target.id === "deleteShortcut"){
-      const keyword = e.target.getAttribute('data-keyword');
-      deleteShortcutWithKeyword(keyword);
-    }
     
     const classes = e.target.classList;
     if (classes.contains('modal-button')) {
       const target = e.target.getAttribute('data-target');
       document.getElementById(target).classList.add('is-active');
-    }
-
-    if (classes.contains('modal-hide')) {
+    } else if (classes.contains('modal-hide')) {
       const target = e.target.getAttribute('data-target');
-      resetCreateGroupForm();
+      document.getElementById(target).classList.remove('is-active');
     }
 
-    if (e.target.id === 'submitCreateGroupForm') {
-      handleCreateGroupSubmit();
+    switch (e.target.id) {
+      case 'create-group-submit':
+        handleCreateGroupSubmit();
+        break;
+      case 'shortcut-delete':
+        const keyword = e.target.getAttribute('data-keyword');
+        deleteShortcutWithKeyword(keyword);
+        break;
+      case 'import-data-submit':
+        handleImportDataSubmit();
+        break;
+      case 'export-data-load':
+        handleExportDataLoad();
+        break;
+      case 'export-data-copy':
+        handleExportDataCopy();
+        break;
     }
   })
 }
@@ -144,10 +234,10 @@ const initDeleteShortcutEvent = () => {
 function onInit() {
   // seed data
   setDefaultValues(function() {
-    renderUI();  
-    initCreateShortcutForm();
+    renderUI();
     initCreateGroupForm();
-    initDeleteShortcutEvent();
+    initCreateShortcutForm();
+    initClickHandlers();
   });
 }
 

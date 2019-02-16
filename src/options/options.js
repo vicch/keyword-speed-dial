@@ -14,11 +14,11 @@ const resetCreateGroupForm = () => {
 }
 
 const handleCreateGroupSubmit = () => {
-  const prefix = document.getElementById('prefix').value || false;
   const groupName = document.getElementById('group-name').value;
+  const prefix = document.getElementById('prefix').value;
 
-  if (!groupName || !groupName.trim()) {
-    alert('Please enter group name');
+  if (!groupName || !prefix) {
+    alert('Please enter group name and prefix');
     return;
   }
 
@@ -54,7 +54,7 @@ const initCreateShortcutForm = () => {
     const url = document.getElementById('url').value;
 
     if (!keyword || !url) {
-      alert('Please enter valid details');
+      alert('Please enter keyword and URL');
       return;
     }
 

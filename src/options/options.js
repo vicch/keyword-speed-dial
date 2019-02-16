@@ -1,4 +1,4 @@
-import { setDefaultValues, renderUI, guid, isValidURL } from './helpers.js';
+import { sortGroup, sortShortcut, setDefaultValues, renderUI, guid, isValidURL } from './helpers.js';
 
 const initCreateGroupForm = () => {
   const el = document.getElementById('create-group-form');
@@ -36,9 +36,8 @@ const handleCreateGroupSubmit = () => {
       prefix: prefix,
       name: groupName
     });
-    groups.sort((a, b) => {
-      return (a.groupName > b.groupName) ? 1 : -1;
-    });
+    groups.sort(sortGroup);
+
     chrome.storage.local.set({groups: groups}, function() {
       resetCreateGroupForm();
       renderUI();
@@ -79,13 +78,8 @@ const initCreateShortcutForm = () => {
       }
 
       shortcuts.push({ group, keyword, url });
-      shortcuts.sort((a, b) => {
-        if (a.group == b.group) {
-          return (a.keyword > b.keyword) ? 1 : -1;
-        } else {
-          return (a.group > b.group) ? 1 : -1;
-        }
-      });
+      shortcuts.sort(sortShortcut);
+
       chrome.storage.local.set({shortcuts: shortcuts}, function() {
         document.getElementById('keyword').value = '';
         document.getElementById('url').value = '';
@@ -143,9 +137,7 @@ const handleImportDataSubmit = () => {
         groups.push({ id, name, prefix });
       });
 
-      groups.sort((a, b) => {
-        return (a.groupName > b.groupName) ? 1 : -1;
-      });
+      groups.sort(sortGroup);
 
       importShortcuts.forEach(({ group, keyword, url }) => {
         if (!group || !keyword || !url) {
@@ -161,13 +153,7 @@ const handleImportDataSubmit = () => {
         shortcuts.push({ group, keyword, url });
       });
 
-      shortcuts.sort((a, b) => {
-        if (a.group == b.group) {
-          return (a.keyword > b.keyword) ? 1 : -1;
-        } else {
-          return (a.group > b.group) ? 1 : -1;
-        }
-      });
+      shortcuts.sort(sortShortcut);
 
       chrome.storage.local.set({groups: groups, shortcuts: shortcuts}, function() {
         renderUI();

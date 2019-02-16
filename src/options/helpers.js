@@ -1,3 +1,11 @@
+export const sortGroup = (a, b) => {
+  return (a.prefix > b.prefix) ? 1 : -1;
+};
+
+export const sortShortcut = (a, b) => {
+  return (a.keyword > b.keyword) ? 1 : -1;
+};
+
 const getGroupName = (groups, groupId) => {
   const group = groups.find(obj => obj.id === groupId);
   return group ? group.name : 'Default';

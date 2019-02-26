@@ -1,6 +1,6 @@
 ## Keyword Speed Dial
 
-[Chrome extension](https://chrome.google.com/webstore/detail/)
+[Chrome extension](https://chrome.google.com/webstore/detail/keyword-speed-dial/ahkoeglneflhhgjihefngpfbljicjjem/)
 
 ### Quick Start
 

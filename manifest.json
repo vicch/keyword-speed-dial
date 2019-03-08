@@ -1,7 +1,7 @@
 {
   "name": "Keyword Speed Dial",
   "description": "Type 'go' and a keyword into the address bar to open url.",
-  "version": "0.2",
+  "version": "0.3",
   "options_page": "src/options/options.html",
   "background": {
     "scripts": ["src/background/background.js"],
@@ -12,7 +12,7 @@
     "tabs"
   ],
   "omnibox": { "keyword" : "go" },
-  "manifest_version": 2,
+  "manifest_version": 3,
   "browser_action": {
     "default_icon": {
       "16": "assets/extension-icons/icon16.png",

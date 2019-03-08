@@ -12,13 +12,17 @@
    - Group: Facebook
    - Keyword: chrome
    - URL: [https://www.facebook.com/googlechrome](https://www.facebook.com/googlechrome)
-4. Type `go fb chrome` in browser address bar and enter.
+4. Type `go fb chrome` in browser address bar and press `Enter`.
 
 ### URL Suffix Support
 
 Any input after an existing speed dial keyword will be appended to the speed dial URL as suffix. E.g. with the speed dial created in Quick Start, by typing `go fb chrome /photos`, browser will go to [https://www.facebook.com/googlechrome/photos](https://www.facebook.com/googlechrome/photos).
 
 This can be used to append URL params like `?foo=bar`.
+
+### Multiple URLs support
+
+When adding a speed dial, you can enter multiple URLs by separating them with `Enter`. If multiple URLs are added to a keyword, all these URLs will be opened by typing `go <keyword>` into browser address bar.
 
 ### Import/Export
 

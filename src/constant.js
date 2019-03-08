@@ -21,5 +21,10 @@ defaultShortcuts = [
     keyword: 'tw',
     url: 'https://twitter.com',
     group: 'default',
+  },
+  {
+    keyword: 'social',
+    url: 'https://facebook.com\nhttps://twitter.com',
+    group: 'default',
   }
 ];

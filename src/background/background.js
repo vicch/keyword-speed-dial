@@ -1,10 +1,10 @@
-const openUrls = (urls) => {
+const openUrls = (urls, suffix = '') => {
   let count = 0;
   urls.forEach((url) => {
     if (count == 0) {
-      chrome.tabs.update(null, {url: url});
+      chrome.tabs.update(null, {url: url + suffix});
     } else {
-      chrome.tabs.create({url: url});
+      chrome.tabs.create({url: url + suffix});
     }
     count += 1;
   });
@@ -36,7 +36,7 @@ chrome.omnibox.onInputEntered.addListener(
 
       shortcut = shortcuts.find(obj => obj.keyword === text.trim())
       if (shortcut) {
-        openUrls(shortcut.url.split('\n'));
+        openUrls(shortcut.url.split('\n'), suffix);
       }
     });
   }

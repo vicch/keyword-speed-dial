@@ -12,7 +12,7 @@
     "tabs"
   ],
   "omnibox": { "keyword" : "go" },
-  "manifest_version": 3,
+  "manifest_version": 2,
   "browser_action": {
     "default_icon": {
       "16": "assets/extension-icons/icon16.png",

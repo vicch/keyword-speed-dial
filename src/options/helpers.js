@@ -46,7 +46,7 @@ export const renderUI = () => {
       <tr>
         <td>${getGroupName(groups, shortcut.group)}</td>
         <td>${shortcut.keyword}</td>
-        <td>${shortcut.url}</td>
+        <td>${shortcut.url.split('\n').join('<br/>')}</td>
         <td>
           <img src="../../assets/icons/trash-alt-regular.svg" width="15" class="c-p" id="shortcut-delete" data-keyword="${shortcut.keyword}">
         </td>

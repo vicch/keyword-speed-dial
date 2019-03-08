@@ -1,3 +1,15 @@
+const openUrls = (urls) => {
+  let count = 0;
+  urls.forEach((url) => {
+    if (count == 0) {
+      chrome.tabs.update(null, {url: url});
+    } else {
+      chrome.tabs.create({url: url});
+    }
+    count += 1;
+  });
+};
+
 // This event is fired with the user accepts the input in the omnibox.
 chrome.omnibox.onInputEntered.addListener(
   function(text) {
@@ -12,8 +24,7 @@ chrome.omnibox.onInputEntered.addListener(
 
       shortcut = shortcuts.find(obj => obj.keyword === text.trim())
       if (shortcut) {
-        newUrl = shortcut.url;
-        chrome.tabs.update(null, {url: newUrl});
+        openUrls(shortcut.url.split('\n'));
         return;
       }
 
@@ -25,8 +36,8 @@ chrome.omnibox.onInputEntered.addListener(
 
       shortcut = shortcuts.find(obj => obj.keyword === text.trim())
       if (shortcut) {
-        newUrl = shortcut.url + suffix;
-        chrome.tabs.update(null, {url: newUrl});
+        openUrls(shortcut.url.split('\n'));
       }
     });
-  });
+  }
+);

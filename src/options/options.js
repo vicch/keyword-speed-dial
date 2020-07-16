@@ -59,7 +59,7 @@ const initCreateShortcutForm = () => {
     }
 
     if (!isValidURL(url)) {
-      alert('Please enter complete URL including http');
+      alert('Please enter normal URL including http(s)://, or local URL including file:///');
       return; 
     }
 
